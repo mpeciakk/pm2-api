@@ -3,7 +3,7 @@ import Router from 'koa-router'
 import bodyParser from 'koa-bodyparser'
 import pm2 from 'pm2'
 import { promisify } from 'util'
-import { freemem, totalmem } from 'os'
+import { freemem, totalmem, cpus } from 'os'
 import dotenv from 'dotenv'
 
 const PORT = 3030
@@ -32,14 +32,14 @@ app.use(async (ctx, next) => {
 })
 
 router.get('/', async (ctx) => {
-    const data = await promisify(pm2.list.bind(pm2))()
+    const data = await (await promisify(pm2.list.bind(pm2))()).map(({ pm2_env, ...data }) => data)
 
     ctx.body = data
 })
 
 router.get('/stats', async (ctx) => {
     ctx.body = {
-        memory: freemem(),
+        memory: totalmem() - freemem(),
         maxMemory: totalmem(),
         cpu: process.cpuUsage().system,
         disk: 0,
