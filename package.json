@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist/app.js",
+    "build": "tsc --build",
     "dev": "tsc-watch --onSuccess \"npm run start\""
   },
   "author": "",
