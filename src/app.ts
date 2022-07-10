@@ -5,6 +5,7 @@ import pm2 from 'pm2'
 import { promisify } from 'util'
 import { freemem, totalmem, cpus } from 'os'
 import dotenv from 'dotenv'
+import { cpu, drive } from 'node-os-utils'
 
 const PORT = 3030
 
@@ -37,12 +38,12 @@ router.get('/', async (ctx) => {
     ctx.body = data
 })
 
-router.get('/stats', async (ctx) => {
+router.get('/stats', async (ctx) => {   
     ctx.body = {
         memory: totalmem() - freemem(),
         maxMemory: totalmem(),
-        cpu: process.cpuUsage().system,
-        disk: 0,
+        cpu: await cpu.usage(),
+        disk: (await drive.used('/')).usedPercentage,
     }
 })
 
