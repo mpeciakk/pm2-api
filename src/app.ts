@@ -33,7 +33,7 @@ app.use(async (ctx, next) => {
 })
 
 router.get('/', async (ctx) => {
-    const data = await (await promisify(pm2.list.bind(pm2))()).map(({ pm2_env, ...data }) => data)
+    const data = await (await promisify(pm2.list.bind(pm2))())
 
     ctx.body = data
 })
